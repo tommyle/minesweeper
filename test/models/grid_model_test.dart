@@ -14,12 +14,13 @@ void main() {
       ];
 
       GridModel gridModel = GridModel.decode(data);
+      gridModel.reveal(3, 0);
 
       expect(gridModel.encode(), [
-        ['E', 'E', 'E', 'E', 'E'],
-        ['E', 'E', 'M', 'E', 'E'],
-        ['E', 'E', 'E', 'E', 'E'],
-        ['E', 'E', 'E', 'E', 'E']
+        ['0', '1', 'E', '1', '0'],
+        ['0', '1', 'M', '1', '0'],
+        ['0', '1', '1', '1', '0'],
+        ['0', '0', '0', '0', '0']
       ]);
     });
   });

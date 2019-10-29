@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minesweeper/components/grid.dart';
+import 'package:minesweeper/models/grid_model.dart';
 import 'package:minesweeper/modules/game_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -39,17 +40,17 @@ class _GameScerenState extends State<GameSceren> {
                 width: 500,
                 height: 500,
                 child: StreamBuilder(
-                    stream: _gameBloc.grid,
+                    stream: _gameBloc.gridModelController,
                     builder: (BuildContext context,
-                        AsyncSnapshot<Grid> snapshot) {
+                        AsyncSnapshot<GridModel> snapshot) {
                       if (snapshot.hasData) {
                         return Grid(
-                          grid: snapshot.data,
+                          gridModel: snapshot.data,
                           onTap: (i, j) {
-                            _gameBloc.revealTile(i, j);
+                            // _gameBloc.revealTile(i, j);
                           },
                           onLongPress: (i, j) {
-                            _gameBloc.toggleFlag(i, j);
+                            // _gameBloc.toggleFlag(i, j);
                           },
                         );
                       } else {

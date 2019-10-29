@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minesweeper/models/grid_model.dart';
-import 'package:minesweeper/modules/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 
 class Grid extends StatelessWidget {
-  final GridModel grid;
+  final GridModel gridModel;
 
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
 
-  Grid({@required this.grid, @required this.onTap, @required this.onLongPress})
+  Grid({@required this.gridModel, @required this.onTap, @required this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +22,9 @@ class Grid extends StatelessWidget {
           crossAxisCount: 10,
           mainAxisSpacing: 2.0,
           crossAxisSpacing: 2.0,
-          children: List.generate(grid.totalCells, (index) {
-            final row = index ~/ grid.rows;
-            final col = index % grid.cols;
+          children: List.generate(gridModel.totalCells, (index) {
+            final row = index ~/ gridModel.rows;
+            final col = index % gridModel.cols;
             // final tile = grid[row][col].type;
 
             return Unrevealed(

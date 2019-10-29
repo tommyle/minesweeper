@@ -8,11 +8,19 @@ class GridModel {
   int get cols => _cells.length > 0 ? _cells[0].length : 0;
   int get totalCells => rows * cols;
 
+  /*
+   * Generates a grid of cells with bombs placed randomly throughout the grid
+   */
   GridModel({@required int rows, @required int cols, @required int bombs}) {
-    final data = List<List<String>>.generate(rows,
-        (_) => List<String>.generate(cols, (_) => TileType.UnrevealedEmpty));
+    List<List<String>> data = List<List<String>>.generate(
+        rows, (_) => List<String>.generate(cols, (_) => TileType.Empty));
 
-    for (int i = 0; i < bombs; i++) {}
+    var rng = new Random();
+    for (int i = 0; i < bombs; i++) {
+      int row = rng.nextInt(rows);
+      int col = rng.nextInt(cols);
+      data[row][col] = TileType.Mine;
+    }
 
     _cells = _decode(data);
   }
@@ -51,7 +59,11 @@ class GridModel {
       List<String> row = [];
 
       for (int j = 0; j < cols; j++) {
-        row.add(_cells[i][j].type);
+        if (_cells[i][j].revealedEmpty) {
+          row.add(_cells[i][j].numMines.toString());
+        } else {
+          row.add(_cells[i][j].type);
+        }
       }
 
       data.add(row);
@@ -59,19 +71,75 @@ class GridModel {
 
     return data;
   }
+
+  reveal(int i, int j) {
+    //TODO: Reveal all the hidden mines
+    if (_cells[i][j].type == TileType.Mine) {
+      return;
+    }
+
+    _revealDfs(i, j);
+  }
+
+  _revealDfs(int i, int j) {
+    if (i < 0 ||
+        i >= rows ||
+        j < 0 ||
+        j >= cols ||
+        !_cells[i][j].unrevealedEmpty) {
+      return;
+    }
+
+    List<List<int>> directions = [
+      [-1, -1],
+      [0, -1],
+      [1, -1],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+      [-1, 1],
+      [-1, 0]
+    ];
+
+    int numMines = 0;
+
+    for (List<int> dir in directions) {
+      int row = i + dir[0];
+      int col = j + dir[1];
+
+      if (row >= 0 &&
+          row < rows &&
+          col >= 0 &&
+          col < cols &&
+          _cells[row][col].type == TileType.Mine) {
+        numMines += 1;
+      }
+    }
+
+    if (numMines >= 0) {
+      _cells[i][j].revealed = true;
+      _cells[i][j].numMines = numMines;
+    }
+
+    for (List<int> dir in directions) {
+      _revealDfs(i + dir[0], j + dir[1]);
+    }
+  }
 }
 
 class Tile {
   String type;
+  bool revealed = false;
   bool flagged = false;
   int numMines = 0;
 
-  Tile({this.type = TileType.UnrevealedEmpty});
+  bool get unrevealedEmpty => type == TileType.Empty && !revealed;
+  bool get revealedEmpty => type == TileType.Empty && revealed;
+
+  Tile({this.type = TileType.Empty});
 }
 
 class TileType {
-  static const UnrevealedEmpty = "E";
-  static const UnrevealedMine = "M";
-  static const RevealedEmpty = "R";
-  static const RevealedMine = "X";
+  static const Empty = "E";
+  static const Mine = "M";
 }
