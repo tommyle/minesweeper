@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:minesweeper/components/grid.dart';
 import 'package:minesweeper/models/grid_model.dart';
 import 'package:minesweeper/modules/game_bloc.dart';
+import 'package:minesweeper/utilities/colors.dart';
 import 'package:provider/provider.dart';
 
 class GameSceren extends StatefulWidget {
@@ -23,6 +24,94 @@ class _GameScerenState extends State<GameSceren> {
     }
   }
 
+  _buildFlagsWidget() {
+    return Container(
+      width: 140,
+      height: 70,
+      decoration: BoxDecoration(
+          color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
+      margin: EdgeInsets.all(12),
+      child: Center(
+          child: StreamBuilder(
+              initialData: "--",
+              stream: _gameBloc.flagCountController,
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                return Text("Flags: ${snapshot.data}");
+              })),
+    );
+  }
+
+  _buildResetButton() {
+    return Container(
+      width: 70,
+      height: 70,
+      child: Center(
+          child: StreamBuilder(
+              stream: _gameBloc.gameStateController,
+              builder:
+                  (BuildContext context, AsyncSnapshot<GameState> snapshot) {
+                String image = "assets/images/normal.png";
+
+                if (snapshot.hasData && snapshot.data == GameState.Win) {
+                  image = "assets/images/win.png";
+                } else if (snapshot.hasData &&
+                    snapshot.data == GameState.Lose) {
+                  image = "assets/images/lose.png";
+                }
+
+                return Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage(image),
+                    ),
+                  ),
+                );
+              })),
+    );
+  }
+
+  _buildTimerWidget() {
+    return Container(
+      width: 140,
+      height: 70,
+      decoration: BoxDecoration(
+          color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
+      margin: EdgeInsets.all(12),
+      child: Center(
+          child: StreamBuilder(
+              initialData: "--",
+              stream: _gameBloc.timerBloc.elapsedTime,
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                return Text(snapshot.data);
+              })),
+    );
+  }
+
+  _buildGridWidget() {
+    return Container(
+        width: 500,
+        height: 500,
+        child: StreamBuilder(
+            stream: _gameBloc.gridModelController,
+            builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {
+              if (snapshot.hasData) {
+                return Grid(
+                  gridModel: snapshot.data,
+                  onTap: (i, j) {
+                    _gameBloc.reveal(i, j);
+                  },
+                  onLongPress: (i, j) {
+                    _gameBloc.toggleFlag(i, j);
+                  },
+                );
+              } else {
+                return Container();
+              }
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     initBloc(context);
@@ -37,26 +126,18 @@ class _GameScerenState extends State<GameSceren> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                width: 500,
-                height: 500,
-                child: StreamBuilder(
-                    stream: _gameBloc.gridModelController,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<GridModel> snapshot) {
-                      if (snapshot.hasData) {
-                        return Grid(
-                          gridModel: snapshot.data,
-                          onTap: (i, j) {
-                            _gameBloc.reveal(i, j);
-                          },
-                          onLongPress: (i, j) {
-                            // _gameBloc.toggleFlag(i, j);
-                          },
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }))
+              width: 500,
+              height: 70,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _buildFlagsWidget(),
+                  _buildResetButton(),
+                  _buildTimerWidget(),
+                ],
+              ),
+            ),
+            _buildGridWidget()
           ],
         ),
       ),

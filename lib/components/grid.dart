@@ -59,6 +59,17 @@ class CellWidget extends StatelessWidget {
 
   //   );
 
+  _flag() {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.contain,
+          image: AssetImage("assets/images/flag.png"),
+        ),
+      ),
+    );
+  }
+
   CellWidget(
       {@required this.cell,
       @required this.row,
@@ -69,9 +80,12 @@ class CellWidget extends StatelessWidget {
       _color = Colors.green;
     } else if (this.cell.mine) {
       _color = Colors.red;
-    } 
-    else {
-      _color = ziggurat;
+    } else {
+      if (this.cell.flagged) {
+        _color = Colors.orange;
+      } else {
+        _color = ziggurat;
+      }
     }
   }
 

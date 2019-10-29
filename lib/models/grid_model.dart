@@ -3,17 +3,23 @@ import 'dart:math';
 
 class GridModel {
   List<List<Cell>> cells;
+  int mines;
+  int flags;
+  int numRevealed = 0;
 
   int get rows => cells.length;
   int get cols => cells.length > 0 ? cells[0].length : 0;
   int get totalCells => rows * cols;
+  bool get didWin => numRevealed == totalCells - mines;
 
   /*
    * Generates a grid of cells with mines placed randomly throughout the grid
    */
-  GridModel({@required int rows, @required int cols, @required int mines}) {
+  GridModel({@required int rows, @required int cols, @required this.mines}) {
     List<List<String>> data = List<List<String>>.generate(
         rows, (_) => List<String>.generate(cols, (_) => CellType.Empty));
+
+    flags = mines;
 
     var rng = new Random();
     var i = 0;
@@ -77,6 +83,18 @@ class GridModel {
     return data;
   }
 
+  toggleFlag(int i, int j) {
+    if (!cells[i][j].revealed) {
+      cells[i][j].flagged = !cells[i][j].flagged;
+
+      if (cells[i][j].flagged) {
+        flags--;
+      } else {
+        flags++;
+      }
+    }
+  }
+
   reveal(int i, int j) {
     //TODO: Reveal all the hidden mines!
     if (cells[i][j].type == CellType.Mine) {
@@ -91,7 +109,8 @@ class GridModel {
         i >= rows ||
         j < 0 ||
         j >= cols ||
-        !cells[i][j].unrevealedEmpty) {
+        !cells[i][j].unrevealedEmpty ||
+        cells[i][j].flagged) {
       return;
     }
 
@@ -122,6 +141,7 @@ class GridModel {
     }
 
     cells[i][j].revealed = true;
+    numRevealed += 1;
 
     if (numMines > 0) {
       cells[i][j].numMines = numMines;
