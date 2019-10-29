@@ -130,52 +130,53 @@ class _GameScerenState extends State<GameSceren> {
             }));
   }
 
+  _header() {
+    return Container(
+        margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Text("MI",
+              style: TextStyle(
+                  color: mayaBlue, fontFamily: defaultFont, fontSize: 60)),
+          Text("NE",
+              style: TextStyle(
+                  color: brinkPink, fontFamily: defaultFont, fontSize: 60)),
+          Text(
+            "SWEEPER",
+            style:
+                TextStyle(color: raven, fontFamily: defaultFont, fontSize: 60),
+          )
+        ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     initBloc(context);
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-            Text("MI",
-                style: TextStyle(
-                    color: mayaBlue, fontFamily: defaultFont, fontSize: 40)),
-            Text("NE",
-                style: TextStyle(
-                    color: brinkPink, fontFamily: defaultFont, fontSize: 40)),
-            Text(
-              "SWEEPER",
-              style: TextStyle(
-                  color: raven, fontFamily: defaultFont, fontSize: 40),
-            )
-          ]),
-        ),
         body: SingleChildScrollView(
             child: Stack(children: <Widget>[
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 500,
-                  height: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      _buildFlagsWidget(),
-                      _buildResetButton(),
-                      _buildTimerWidget(),
-                    ],
-                  ),
-                ),
-                _buildGridWidget()
-              ],
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _header(),
+            Container(
+              width: 500,
+              height: 70,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _buildFlagsWidget(),
+                  _buildResetButton(),
+                  _buildTimerWidget(),
+                ],
+              ),
             ),
-          ),
-        ])));
+            _buildGridWidget()
+          ],
+        ),
+      ),
+    ])));
   }
 }
