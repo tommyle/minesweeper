@@ -73,7 +73,7 @@ class GridModel {
   }
 
   reveal(int i, int j) {
-    //TODO: Reveal all the hidden mines
+    //TODO: Reveal all the hidden mines!
     if (_cells[i][j].type == TileType.Mine) {
       return;
     }
@@ -116,9 +116,11 @@ class GridModel {
       }
     }
 
-    if (numMines >= 0) {
-      _cells[i][j].revealed = true;
+    _cells[i][j].revealed = true;
+
+    if (numMines > 0) {
       _cells[i][j].numMines = numMines;
+      return;
     }
 
     for (List<int> dir in directions) {
