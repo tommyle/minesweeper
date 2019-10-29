@@ -38,3 +38,6 @@ flutter:
     - family: ConcertOne
       fonts:
         - asset: assets/fonts/ConcertOne-Regular.ttf
+    - family: Bulo
+      fonts:
+        - asset: assets/fonts/BuloRounded-Black.ttf

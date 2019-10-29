@@ -4,6 +4,7 @@ import 'package:minesweeper/components/grid.dart';
 import 'package:minesweeper/models/grid_model.dart';
 import 'package:minesweeper/modules/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
+import 'package:minesweeper/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
 class GameSceren extends StatefulWidget {
@@ -39,7 +40,7 @@ class _GameScerenState extends State<GameSceren> {
                 return Text(
                   "Flags: ${snapshot.data}",
                   style: TextStyle(
-                      fontFamily: "ConcertOne",
+                      fontFamily: defaultFont,
                       fontSize: 20,
                       color: Colors.black),
                 );
@@ -98,7 +99,7 @@ class _GameScerenState extends State<GameSceren> {
                 return Text(
                   "${snapshot.data}",
                   style: TextStyle(
-                      fontFamily: "ConcertOne",
+                      fontFamily: defaultFont,
                       fontSize: 20,
                       color: Colors.black),
                 );
@@ -108,8 +109,8 @@ class _GameScerenState extends State<GameSceren> {
 
   _buildGridWidget() {
     return Container(
-        width: _gameBloc.cols * 50.0,
-        height: _gameBloc.rows * 50.0,
+        width: _gameBloc.cols * 35.0,
+        height: _gameBloc.rows * 35.0,
         child: StreamBuilder(
             stream: _gameBloc.gridModelController,
             builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {
@@ -134,30 +135,47 @@ class _GameScerenState extends State<GameSceren> {
     initBloc(context);
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: 500,
-              height: 70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _buildFlagsWidget(),
-                  _buildResetButton(),
-                  _buildTimerWidget(),
-                ],
-              ),
-            ),
-            _buildGridWidget()
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+            Text("MI",
+                style: TextStyle(
+                    color: mayaBlue, fontFamily: defaultFont, fontSize: 40)),
+            Text("NE",
+                style: TextStyle(
+                    color: brinkPink, fontFamily: defaultFont, fontSize: 40)),
+            Text(
+              "SWEEPER",
+              style: TextStyle(
+                  color: raven, fontFamily: defaultFont, fontSize: 40),
+            )
+          ]),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+            child: Stack(children: <Widget>[
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 500,
+                  height: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _buildFlagsWidget(),
+                      _buildResetButton(),
+                      _buildTimerWidget(),
+                    ],
+                  ),
+                ),
+                _buildGridWidget()
+              ],
+            ),
+          ),
+        ])));
   }
 }

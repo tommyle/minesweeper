@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minesweeper/models/grid_model.dart';
 import 'package:minesweeper/utilities/colors.dart';
+import 'package:minesweeper/utilities/constants.dart';
 
 class Grid extends StatelessWidget {
   final GridModel gridModel;
@@ -61,6 +62,7 @@ class CellWidget extends StatelessWidget {
 
   _flag() {
     return Container(
+      margin: EdgeInsets.all(6),
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.contain,
@@ -77,29 +79,31 @@ class CellWidget extends StatelessWidget {
       @required this.onTap,
       @required this.onLongPress}) {
     if (this.cell.revealed) {
-      _color = Colors.green;
-    } else if (this.cell.mine) {
-      _color = Colors.red;
-    } else {
-      if (this.cell.flagged) {
-        _color = Colors.orange;
+      if (this.cell.numMines > 2) {
+        _color = brightSun;
+      } else if (this.cell.numMines == 2) {
+        _color = brinkPink;
       } else {
-        _color = ziggurat;
+        _color = mayaBlue;
       }
+    } else {
+      _color = ziggurat;
     }
   }
 
+  //TODO: REFACTOR THIS!!!!!
+  //TODO: REFACTOR THIS!!!!!
   _cellText() {
-    if (cell.revealed && cell.numMines > 0) {
+    if (!cell.revealed && cell.flagged) {
+      return _flag();
+    } else if (cell.revealed && cell.numMines > 0) {
       return FittedBox(
           fit: BoxFit.scaleDown,
-          // Optionally apply `alignment` to position the text inside the box:
-          //alignment: Alignment.topRight,
           child: SizedBox(
             child: Text(
               "${cell.numMines}",
               style: TextStyle(
-                  fontFamily: "ConcertOne", fontSize: 30, color: Colors.white),
+                  fontFamily: defaultFont, fontSize: 40, color: Colors.white),
             ),
           ));
     } else {
