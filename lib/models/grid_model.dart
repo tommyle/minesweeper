@@ -2,44 +2,49 @@ import 'package:flutter/foundation.dart';
 import 'dart:math';
 
 class GridModel {
-  List<List<Tile>> _cells;
+  List<List<Cell>> cells;
 
-  int get rows => _cells.length;
-  int get cols => _cells.length > 0 ? _cells[0].length : 0;
+  int get rows => cells.length;
+  int get cols => cells.length > 0 ? cells[0].length : 0;
   int get totalCells => rows * cols;
 
   /*
-   * Generates a grid of cells with bombs placed randomly throughout the grid
+   * Generates a grid of cells with mines placed randomly throughout the grid
    */
-  GridModel({@required int rows, @required int cols, @required int bombs}) {
+  GridModel({@required int rows, @required int cols, @required int mines}) {
     List<List<String>> data = List<List<String>>.generate(
-        rows, (_) => List<String>.generate(cols, (_) => TileType.Empty));
+        rows, (_) => List<String>.generate(cols, (_) => CellType.Empty));
 
     var rng = new Random();
-    for (int i = 0; i < bombs; i++) {
+    var i = 0;
+
+    while (i < mines) {
       int row = rng.nextInt(rows);
       int col = rng.nextInt(cols);
-      data[row][col] = TileType.Mine;
+      if (data[row][col] != CellType.Mine) {
+        data[row][col] = CellType.Mine;
+        i++;
+      }
     }
 
-    _cells = _decode(data);
+    cells = _decode(data);
   }
 
   /*
    * Creates a GridModel from a list of strings
    */
   GridModel.decode(List<List<String>> data) {
-    _cells = _decode(data);
+    cells = _decode(data);
   }
 
-  List<List<Tile>> _decode(List<List<String>> data) {
-    List<List<Tile>> newCells = List<List<Tile>>();
+  List<List<Cell>> _decode(List<List<String>> data) {
+    List<List<Cell>> newCells = List<List<Cell>>();
 
     for (int i = 0; i < data.length; i++) {
-      List<Tile> row = [];
+      List<Cell> row = [];
 
       for (int j = 0; j < data[i].length; j++) {
-        Tile tile = Tile(type: data[i][j]);
+        Cell tile = Cell(type: data[i][j]);
         row.add(tile);
       }
 
@@ -59,10 +64,10 @@ class GridModel {
       List<String> row = [];
 
       for (int j = 0; j < cols; j++) {
-        if (_cells[i][j].revealedEmpty) {
-          row.add(_cells[i][j].numMines.toString());
+        if (cells[i][j].revealedEmpty) {
+          row.add(cells[i][j].numMines.toString());
         } else {
-          row.add(_cells[i][j].type);
+          row.add(cells[i][j].type);
         }
       }
 
@@ -74,7 +79,7 @@ class GridModel {
 
   reveal(int i, int j) {
     //TODO: Reveal all the hidden mines!
-    if (_cells[i][j].type == TileType.Mine) {
+    if (cells[i][j].type == CellType.Mine) {
       return;
     }
 
@@ -86,7 +91,7 @@ class GridModel {
         i >= rows ||
         j < 0 ||
         j >= cols ||
-        !_cells[i][j].unrevealedEmpty) {
+        !cells[i][j].unrevealedEmpty) {
       return;
     }
 
@@ -111,15 +116,15 @@ class GridModel {
           row < rows &&
           col >= 0 &&
           col < cols &&
-          _cells[row][col].type == TileType.Mine) {
+          cells[row][col].type == CellType.Mine) {
         numMines += 1;
       }
     }
 
-    _cells[i][j].revealed = true;
+    cells[i][j].revealed = true;
 
     if (numMines > 0) {
-      _cells[i][j].numMines = numMines;
+      cells[i][j].numMines = numMines;
       return;
     }
 
@@ -129,19 +134,21 @@ class GridModel {
   }
 }
 
-class Tile {
+class Cell {
   String type;
   bool revealed = false;
   bool flagged = false;
   int numMines = 0;
 
-  bool get unrevealedEmpty => type == TileType.Empty && !revealed;
-  bool get revealedEmpty => type == TileType.Empty && revealed;
+  bool get unrevealedEmpty => type == CellType.Empty && !revealed;
+  bool get revealedEmpty => type == CellType.Empty && revealed;
+  bool get mine => type == CellType.Mine;
+  bool get empty => type == CellType.Empty;
 
-  Tile({this.type = TileType.Empty});
+  Cell({this.type = CellType.Empty});
 }
 
-class TileType {
+class CellType {
   static const Empty = "E";
   static const Mine = "M";
 }

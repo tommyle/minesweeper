@@ -9,7 +9,10 @@ class Grid extends StatelessWidget {
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
 
-  Grid({@required this.gridModel, @required this.onTap, @required this.onLongPress});
+  Grid(
+      {@required this.gridModel,
+      @required this.onTap,
+      @required this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -25,68 +28,60 @@ class Grid extends StatelessWidget {
           children: List.generate(gridModel.totalCells, (index) {
             final row = index ~/ gridModel.rows;
             final col = index % gridModel.cols;
-            // final tile = grid[row][col].type;
+            final cell = gridModel.cells[row][col];
 
-            return Unrevealed(
-                  row: row,
-                  col: col,
-                  onTap: onTap,
-                  onLongPress: onLongPress,
-                );
-
-            // if (tile == "R") {
-            //   if (tile.flagged) {
-            //     return Flagged(
-            //       row: row,
-            //       col: col,
-            //       onLongPress: onLongPress,
-            //     );
-            //   } else {
-            //     return Unrevealed(
-            //       row: row,
-            //       col: col,
-            //       onTap: onTap,
-            //       onLongPress: onLongPress,
-            //     );
-            //   }
-            // } else if (tile.mine) {
-            //   return Mine();
-            // } else {
-            //   return Revealed(tile.numMines);
-            // }
+            return CellWidget(
+              cell: cell,
+              row: row,
+              col: col,
+              onTap: onTap,
+              onLongPress: onLongPress,
+            );
           }),
         ));
   }
 }
 
-class Revealed extends StatelessWidget {
-  final int numMines;
-
-  Revealed(this.numMines);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.green, borderRadius: BorderRadius.circular(4.0)),
-      width: 10,
-      height: 10,
-      child: Center(child: Text("$numMines")),
-    );
-  }
-}
-
-class Unrevealed extends StatelessWidget {
+class CellWidget extends StatelessWidget {
+  final Cell cell;
   final int row;
   final int col;
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
+  Color _color;
 
-  Unrevealed(
-      {@required this.row,
+  // factory CellWidget(
+  //     {@required this.cell,
+  //     @required this.row,
+  //     @required this.col,
+  //     @required this.onTap,
+  //     @required this.onLongPress}) {
+
+  //   );
+
+  CellWidget(
+      {@required this.cell,
+      @required this.row,
       @required this.col,
       @required this.onTap,
-      @required this.onLongPress});
+      @required this.onLongPress}) {
+    if (this.cell.revealed) {
+      _color = Colors.green;
+    } else if (this.cell.mine) {
+      _color = Colors.red;
+    } 
+    else {
+      _color = ziggurat;
+    }
+  }
+
+  _cellText() {
+    if (cell.revealed && cell.numMines > 0) {
+      return Text("${cell.numMines}");
+    } else {
+      return Container();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,44 +94,10 @@ class Unrevealed extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              color: ziggurat, borderRadius: BorderRadius.circular(4.0)),
+              color: _color, borderRadius: BorderRadius.circular(4.0)),
           width: 10,
           height: 10,
-          child: Center(child: Text("")),
+          child: Center(child: _cellText()),
         ));
-  }
-}
-
-class Flagged extends StatelessWidget {
-  final int row;
-  final int col;
-  final Function(int, int) onLongPress;
-
-  Flagged({@required this.row, @required this.col, @required this.onLongPress});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onLongPress: () {
-          onLongPress(row, col);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(4.0)),
-          width: 10,
-          height: 10,
-        ));
-  }
-}
-
-class Mine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.black, borderRadius: BorderRadius.circular(4.0)),
-      width: 10,
-      height: 10,
-    );
   }
 }

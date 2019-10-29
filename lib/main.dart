@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Provider(
           child: GameSceren(title: 'Minesweeper'),
-          value: GameBloc(rows: 10, cols: 10, bombs: 10)),
+          value: GameBloc(rows: 10, cols: 10, mines: 10)),
     );
   }
 }

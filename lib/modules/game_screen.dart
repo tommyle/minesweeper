@@ -47,7 +47,7 @@ class _GameScerenState extends State<GameSceren> {
                         return Grid(
                           gridModel: snapshot.data,
                           onTap: (i, j) {
-                            // _gameBloc.revealTile(i, j);
+                            _gameBloc.reveal(i, j);
                           },
                           onLongPress: (i, j) {
                             // _gameBloc.toggleFlag(i, j);
