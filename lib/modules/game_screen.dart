@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minesweeper/components/grid.dart';
+import 'package:minesweeper/components/settings.dart';
 import 'package:minesweeper/models/grid_model.dart';
 import 'package:minesweeper/modules/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
@@ -25,9 +26,52 @@ class _GameScerenState extends State<GameSceren> {
     }
   }
 
+  _showSettings() async {
+    final result = await showDialog<GameDifficulty>(
+        context: context, builder: (BuildContext context) => Settings());
+
+    if (result == GameDifficulty.Easy) {
+      _gameBloc.newGame(rows: 9, cols: 9, mines: 10);
+    } else if (result == GameDifficulty.Medium) {
+      _gameBloc.newGame(rows: 16, cols: 16, mines: 40);
+    } else if (result == GameDifficulty.Hard) {
+      _gameBloc.newGame(rows: 8, cols: 15, mines: 1);
+    }
+  }
+
+  _settingsButton() {
+    return GestureDetector(
+      onTap: () {
+        _showSettings();
+      },
+      child: Container(
+        height: 70,
+        width: 50,
+        decoration: BoxDecoration(
+            color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
+        margin: EdgeInsets.all(12),
+        child: Center(child: Icon(Icons.settings)),
+      ),
+    );
+  }
+
+  _leaderBoardButton() {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 70,
+        width: 50,
+        decoration: BoxDecoration(
+            color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
+        margin: EdgeInsets.all(12),
+        child: Center(child: Icon(Icons.star)),
+      ),
+    );
+  }
+
   _buildFlagsWidget() {
     return Container(
-      width: 140,
+      width: 110,
       height: 70,
       decoration: BoxDecoration(
           color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
@@ -86,7 +130,7 @@ class _GameScerenState extends State<GameSceren> {
 
   _buildTimerWidget() {
     return Container(
-      width: 140,
+      width: 110,
       height: 70,
       decoration: BoxDecoration(
           color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
@@ -108,14 +152,14 @@ class _GameScerenState extends State<GameSceren> {
   }
 
   _buildGridWidget() {
-    return Container(
-        width: _gameBloc.cols * 35.0,
-        height: _gameBloc.rows * 35.0,
-        child: StreamBuilder(
-            stream: _gameBloc.gridModelController,
-            builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {
-              if (snapshot.hasData) {
-                return Grid(
+    return StreamBuilder(
+        stream: _gameBloc.gridModelController,
+        builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+                width: _gameBloc.cols * 35.0,
+                height: _gameBloc.rows * 35.0,
+                child: Grid(
                   gridModel: snapshot.data,
                   onTap: (i, j) {
                     _gameBloc.reveal(i, j);
@@ -123,11 +167,11 @@ class _GameScerenState extends State<GameSceren> {
                   onLongPress: (i, j) {
                     _gameBloc.toggleFlag(i, j);
                   },
-                );
-              } else {
-                return Container();
-              }
-            }));
+                ));
+          } else {
+            return Container();
+          }
+        });
   }
 
   _header() {
@@ -149,6 +193,31 @@ class _GameScerenState extends State<GameSceren> {
         ]));
   }
 
+  _hud() {
+    return Container(
+      width: 500,
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _settingsButton(),
+          _buildFlagsWidget(),
+          _buildResetButton(),
+          _buildTimerWidget(),
+          _leaderBoardButton(),
+        ],
+      ),
+    );
+  }
+
+  _instructions() {
+    return Padding(
+        padding: EdgeInsets.all(10),
+        child: Text("Tip: Long press to add a flag",
+            style: TextStyle(
+                color: raven, fontFamily: defaultFont, fontSize: 14)));
+  }
+
   @override
   Widget build(BuildContext context) {
     initBloc(context);
@@ -161,19 +230,9 @@ class _GameScerenState extends State<GameSceren> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _header(),
-            Container(
-              width: 500,
-              height: 70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _buildFlagsWidget(),
-                  _buildResetButton(),
-                  _buildTimerWidget(),
-                ],
-              ),
-            ),
-            _buildGridWidget()
+            _hud(),
+            _buildGridWidget(),
+            _instructions(),
           ],
         ),
       ),

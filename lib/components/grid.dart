@@ -25,10 +25,8 @@ class Grid extends StatelessWidget {
         child: GridView.count(
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: gridModel.cols,
-          mainAxisSpacing: 2.0,
-          crossAxisSpacing: 2.0,
           children: List.generate(gridModel.totalCells, (index) {
-            final row = index ~/ gridModel.rows;
+            final row = index ~/ gridModel.cols;
             final col = index % gridModel.cols;
             final cell = gridModel.cells[row][col];
 
@@ -139,6 +137,7 @@ class CellWidget extends StatelessWidget {
           onLongPress(row, col);
         },
         child: Container(
+          margin: EdgeInsets.all(1.0),
           decoration: BoxDecoration(
               color: _color, borderRadius: BorderRadius.circular(4.0)),
           width: 10,

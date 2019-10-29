@@ -10,18 +10,17 @@ enum GameState {
 }
 
 class GameBloc {
-  int rows;
-  int cols;
-  int mines;
-
   final gridModelController = BehaviorSubject<GridModel>();
   final flagCountController = BehaviorSubject<String>();
   final gameStateController = BehaviorSubject<GameState>();
 
+  int get rows => gridModelController.value.cells.length;
+  int get cols => gridModelController.value.cells[0].length;
+
   TimerBloc timerBloc = TimerBloc();
 
-  GameBloc({@required this.rows, @required this.cols, @required this.mines}) {
-    reset();
+  GameBloc() {
+    newGame();
   }
 
   GameBloc.withGridModel({@required GridModel gridModel}) {
@@ -30,6 +29,11 @@ class GameBloc {
   }
 
   reset() {
+    final gridModel = gridModelController.value;
+    newGame(rows: gridModel.rows, cols: gridModel.cols, mines: gridModel.mines);
+  }
+
+  newGame({int rows = 9, int cols = 9, int mines = 10}) {
     var gridModel = GridModel(rows: rows, cols: cols, mines: mines);
     gridModelController.add(gridModel);
     flagCountController.add(gridModel.flags.toString());
