@@ -39,18 +39,24 @@ class GameBloc {
   }
 
   reveal(int i, int j) {
+    if (gridModelController.value.gameState != GameState.InProgress) {
+      return;
+    }
+
     gridModelController.value.reveal(i, j);
     gridModelController.add(gridModelController.value);
-    gameStateController.add(gridModelController.value.didWin
-        ? GameState.Win
-        : GameState.InProgress);
+    gameStateController.add(gridModelController.value.gameState);
 
-    if (gridModelController.value.didWin) {
+    if (gridModelController.value.gameState != GameState.InProgress) {
       timerBloc.stopTimer();
     }
   }
 
   toggleFlag(int i, int j) {
+    if (gridModelController.value.gameState != GameState.InProgress) {
+      return;
+    }
+
     gridModelController.value.toggleFlag(i, j);
     gridModelController.add(gridModelController.value);
     flagCountController.add(gridModelController.value.flags.toString());

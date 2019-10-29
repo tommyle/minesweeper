@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minesweeper/models/grid_model.dart';
+import 'package:minesweeper/modules/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
 
@@ -37,6 +38,7 @@ class Grid extends StatelessWidget {
               col: col,
               onTap: onTap,
               onLongPress: onLongPress,
+              gameState: gridModel.gameState,
             );
           }),
         ));
@@ -49,6 +51,7 @@ class CellWidget extends StatelessWidget {
   final int col;
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
+  final GameState gameState;
   Color _color;
 
   // factory CellWidget(
@@ -72,12 +75,25 @@ class CellWidget extends StatelessWidget {
     );
   }
 
+  _mine() {
+    return Container(
+      margin: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.contain,
+          image: AssetImage("assets/images/bomb.png"),
+        ),
+      ),
+    );
+  }
+
   CellWidget(
       {@required this.cell,
       @required this.row,
       @required this.col,
       @required this.onTap,
-      @required this.onLongPress}) {
+      @required this.onLongPress,
+      @required this.gameState}) {
     if (this.cell.revealed) {
       if (this.cell.numMines > 2) {
         _color = brightSun;
@@ -106,6 +122,8 @@ class CellWidget extends StatelessWidget {
                   fontFamily: defaultFont, fontSize: 40, color: Colors.white),
             ),
           ));
+    } else if (gameState == GameState.Lose && cell.mine) {
+      return _mine();
     } else {
       return Container();
     }

@@ -1,16 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'dart:math';
 
+import 'package:minesweeper/modules/game_bloc.dart';
+
 class GridModel {
   List<List<Cell>> cells;
   int mines;
   int flags;
   int numRevealed = 0;
+  GameState gameState = GameState.InProgress;
 
   int get rows => cells.length;
   int get cols => cells.length > 0 ? cells[0].length : 0;
   int get totalCells => rows * cols;
-  bool get didWin => numRevealed == totalCells - mines;
 
   /*
    * Generates a grid of cells with mines placed randomly throughout the grid
@@ -96,12 +98,19 @@ class GridModel {
   }
 
   reveal(int i, int j) {
-    if (i < 0 ||
-        i >= rows ||
-        j < 0 ||
-        j >= cols ||
-        !cells[i][j].unrevealedEmpty ||
-        cells[i][j].flagged) {
+    if (i < 0 || i >= rows || j < 0 || j >= cols) {
+      return;
+    }
+
+    if (cells[i][j].mine) {
+      gameState = GameState.Lose;
+      return;
+    } else if (numRevealed == totalCells - mines) {
+      gameState = GameState.Win;
+      return;
+    }
+
+    if (!cells[i][j].unrevealedEmpty || cells[i][j].flagged) {
       return;
     }
 
