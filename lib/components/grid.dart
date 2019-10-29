@@ -22,7 +22,7 @@ class Grid extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: GridView.count(
           physics: NeverScrollableScrollPhysics(),
-          crossAxisCount: 10,
+          crossAxisCount: gridModel.cols,
           mainAxisSpacing: 2.0,
           crossAxisSpacing: 2.0,
           children: List.generate(gridModel.totalCells, (index) {
@@ -91,7 +91,17 @@ class CellWidget extends StatelessWidget {
 
   _cellText() {
     if (cell.revealed && cell.numMines > 0) {
-      return Text("${cell.numMines}");
+      return FittedBox(
+          fit: BoxFit.scaleDown,
+          // Optionally apply `alignment` to position the text inside the box:
+          //alignment: Alignment.topRight,
+          child: SizedBox(
+            child: Text(
+              "${cell.numMines}",
+              style: TextStyle(
+                  fontFamily: "ConcertOne", fontSize: 30, color: Colors.white),
+            ),
+          ));
     } else {
       return Container();
     }

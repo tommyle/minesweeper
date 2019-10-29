@@ -36,39 +36,50 @@ class _GameScerenState extends State<GameSceren> {
               initialData: "--",
               stream: _gameBloc.flagCountController,
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                return Text("Flags: ${snapshot.data}");
+                return Text(
+                  "Flags: ${snapshot.data}",
+                  style: TextStyle(
+                      fontFamily: "ConcertOne",
+                      fontSize: 20,
+                      color: Colors.black),
+                );
               })),
     );
   }
 
   _buildResetButton() {
-    return Container(
-      width: 70,
-      height: 70,
-      child: Center(
-          child: StreamBuilder(
-              stream: _gameBloc.gameStateController,
-              builder:
-                  (BuildContext context, AsyncSnapshot<GameState> snapshot) {
-                String image = "assets/images/normal.png";
+    return GestureDetector(
+      onTap: () {
+        _gameBloc.reset();
+      },
+      child: Container(
+        width: 70,
+        height: 70,
+        child: Center(
+            child: StreamBuilder(
+                stream: _gameBloc.gameStateController,
+                builder:
+                    (BuildContext context, AsyncSnapshot<GameState> snapshot) {
+                  String image = "assets/images/normal.png";
 
-                if (snapshot.hasData && snapshot.data == GameState.Win) {
-                  image = "assets/images/win.png";
-                } else if (snapshot.hasData &&
-                    snapshot.data == GameState.Lose) {
-                  image = "assets/images/lose.png";
-                }
+                  if (snapshot.hasData && snapshot.data == GameState.Win) {
+                    image = "assets/images/win.png";
+                  } else if (snapshot.hasData &&
+                      snapshot.data == GameState.Lose) {
+                    image = "assets/images/lose.png";
+                  }
 
-                return Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage(image),
+                  return Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage(image),
+                      ),
                     ),
-                  ),
-                );
-              })),
+                  );
+                })),
+      ),
     );
   }
 
@@ -84,15 +95,21 @@ class _GameScerenState extends State<GameSceren> {
               initialData: "--",
               stream: _gameBloc.timerBloc.elapsedTime,
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                return Text(snapshot.data);
+                return Text(
+                  "${snapshot.data}",
+                  style: TextStyle(
+                      fontFamily: "ConcertOne",
+                      fontSize: 20,
+                      color: Colors.black),
+                );
               })),
     );
   }
 
   _buildGridWidget() {
     return Container(
-        width: 500,
-        height: 500,
+        width: _gameBloc.cols * 50.0,
+        height: _gameBloc.rows * 50.0,
         child: StreamBuilder(
             stream: _gameBloc.gridModelController,
             builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {

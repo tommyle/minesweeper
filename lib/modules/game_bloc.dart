@@ -21,15 +21,21 @@ class GameBloc {
   TimerBloc timerBloc = TimerBloc();
 
   GameBloc({@required this.rows, @required this.cols, @required this.mines}) {
-    var gridModel = GridModel(rows: rows, cols: cols, mines: mines);
-    gridModelController.add(gridModel);
-    flagCountController.add(gridModel.flags.toString());
-    timerBloc.startWatch();
+    reset();
   }
 
   GameBloc.withGridModel({@required GridModel gridModel}) {
     gridModelController.add(gridModel);
     flagCountController.add(gridModel.flags.toString());
+  }
+
+  reset() {
+    var gridModel = GridModel(rows: rows, cols: cols, mines: mines);
+    gridModelController.add(gridModel);
+    flagCountController.add(gridModel.flags.toString());
+    gameStateController.add(GameState.InProgress);
+    timerBloc.resetTimer();
+    timerBloc.startWatch();
   }
 
   reveal(int i, int j) {
@@ -47,6 +53,7 @@ class GameBloc {
   toggleFlag(int i, int j) {
     gridModelController.value.toggleFlag(i, j);
     gridModelController.add(gridModelController.value);
+    flagCountController.add(gridModelController.value.flags.toString());
   }
 
   dispose() {

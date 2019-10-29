@@ -18,13 +18,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -32,3 +30,11 @@ flutter:
 
   assets:
     - assets/images/
+
+  fonts:
+    - family: FredokaOne
+      fonts:
+        - asset: assets/fonts/FredokaOne-Regular.ttf
+    - family: ConcertOne
+      fonts:
+        - asset: assets/fonts/ConcertOne-Regular.ttf

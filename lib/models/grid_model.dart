@@ -96,15 +96,6 @@ class GridModel {
   }
 
   reveal(int i, int j) {
-    //TODO: Reveal all the hidden mines!
-    if (cells[i][j].type == CellType.Mine) {
-      return;
-    }
-
-    _revealDfs(i, j);
-  }
-
-  _revealDfs(int i, int j) {
     if (i < 0 ||
         i >= rows ||
         j < 0 ||
@@ -149,7 +140,7 @@ class GridModel {
     }
 
     for (List<int> dir in directions) {
-      _revealDfs(i + dir[0], j + dir[1]);
+      reveal(i + dir[0], j + dir[1]);
     }
   }
 }
