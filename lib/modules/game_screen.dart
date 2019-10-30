@@ -158,7 +158,7 @@ class _GameScerenState extends State<GameSceren> {
           if (snapshot.hasData) {
             return Container(
                 width: _gameBloc.cols * 35.0,
-                height: _gameBloc.rows * 35.0,
+                height: _gameBloc.rows * 35.8,
                 child: Grid(
                   gridModel: snapshot.data,
                   onTap: (i, j) {

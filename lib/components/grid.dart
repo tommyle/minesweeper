@@ -140,8 +140,6 @@ class CellWidget extends StatelessWidget {
           margin: EdgeInsets.all(1.0),
           decoration: BoxDecoration(
               color: _color, borderRadius: BorderRadius.circular(4.0)),
-          width: 10,
-          height: 10,
           child: Center(child: _cellText()),
         ));
   }
