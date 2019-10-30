@@ -16,7 +16,7 @@ class GridViewModel {
   bool get didLose => gameState == GameState.Lose;
   bool get isInProgress => gameState == GameState.InProgress;
 
-  bool get _didWin => numRevealed == totalCells - mines;
+  bool get _didWin => numRevealed == totalCells - (mines ?? 0);
 
   static List<List<int>> directions = [
     [-1, -1],
