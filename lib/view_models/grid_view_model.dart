@@ -61,6 +61,9 @@ class GridViewModel {
     cells = _decode(data);
   }
 
+  /*
+   * Decodes a grid of strings into a grid of CellViewModel
+   */
   List<List<CellViewModel>> _decode(List<List<String>> data) {
     List<List<CellViewModel>> newCells = List<List<CellViewModel>>();
 
