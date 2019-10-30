@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   provider: ^1.5.0
   rxdart: ^0.22.4
+  url_launcher: ^5.2.5
 
 dev_dependencies:
   flutter_test:
