@@ -4,7 +4,7 @@
 
 ## Minesweeper
 
-This is a simple demo of the game Minesweeper written in Flutter for the web!
+This is a clone of Minesweeper written in Flutter for the web!
 
 [Click here to play the game!](https://minesweeper-32e4c.firebaseapp.com/#/)
 
