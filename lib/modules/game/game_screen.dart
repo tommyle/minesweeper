@@ -8,6 +8,7 @@ import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
 import 'package:provider/provider.dart';
+import 'dart:html' as html;
 
 class GameSceren extends StatefulWidget {
   GameSceren({Key key, this.title}) : super(key: key);
@@ -52,7 +53,9 @@ class _GameScerenState extends State<GameSceren> {
 
   _leaderBoardButton() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        html.window.open("https://github.com/tommyle/minesweeper", "git repo");
+      },
       child: Container(
         height: 70,
         width: 50,
@@ -163,7 +166,8 @@ class _GameScerenState extends State<GameSceren> {
             return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                    width: _gameBloc.cols * (_gameBloc.cols >= 16 ? 28.0 : 44.0),
+                    width:
+                        _gameBloc.cols * (_gameBloc.cols >= 16 ? 28.0 : 44.0),
                     child: Grid(
                       gridModel: snapshot.data,
                       onTap: (i, j) {
