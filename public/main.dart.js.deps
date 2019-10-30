@@ -683,6 +683,7 @@ file:///Users/TommyLe/repos/minesweeper/.packages
 file:///Users/TommyLe/repos/minesweeper/lib/components/grid.dart
 file:///Users/TommyLe/repos/minesweeper/lib/components/settings.dart
 file:///Users/TommyLe/repos/minesweeper/lib/main.dart
+file:///Users/TommyLe/repos/minesweeper/lib/models/cell.dart
 file:///Users/TommyLe/repos/minesweeper/lib/models/grid_model.dart
 file:///Users/TommyLe/repos/minesweeper/lib/modules/game_bloc.dart
 file:///Users/TommyLe/repos/minesweeper/lib/modules/game_screen.dart

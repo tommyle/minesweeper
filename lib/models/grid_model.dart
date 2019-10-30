@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:minesweeper/models/cell.dart';
 import 'dart:math';
 
-import 'package:minesweeper/modules/game_bloc.dart';
+import 'package:minesweeper/modules/game/game_bloc.dart';
 
 class GridModel {
   List<List<Cell>> cells;

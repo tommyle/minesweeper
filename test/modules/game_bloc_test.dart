@@ -1,4 +1,4 @@
-import 'package:minesweeper/modules/game_bloc.dart';
+import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:test_api/test_api.dart';
 
 void main() {

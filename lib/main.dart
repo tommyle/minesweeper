@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/modules/game_bloc.dart';
-import 'package:minesweeper/modules/game_screen.dart';
+import 'package:minesweeper/modules/game/game_bloc.dart';
+import 'package:minesweeper/modules/game/game_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());

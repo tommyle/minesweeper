@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minesweeper/models/cell.dart';
 import 'package:minesweeper/models/grid_model.dart';
-import 'package:minesweeper/modules/game_bloc.dart';
+import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
 
