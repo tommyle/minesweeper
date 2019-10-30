@@ -5,45 +5,29 @@ import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
 
 class Cell extends StatelessWidget {
+  static const flagImagePath = "assets/images/flag.png";
+  static const bombImagePath = "assets/images/bomb.png";
+
   final CellViewModel cellViewModel;
   final int row;
   final int col;
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
   final GameState gameState;
-  Color _color;
+  final Color _color;
 
-  // factory CellWidget(
-  //     {@required this.cell,
-  //     @required this.row,
-  //     @required this.col,
-  //     @required this.onTap,
-  //     @required this.onLongPress}) {
+  static Color _setColor({@required bool revealed, @required int numMines}) {
+    if (!revealed) {
+      return ziggurat;
+    }
 
-  //   );
-
-  _flag() {
-    return Container(
-      margin: EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.contain,
-          image: AssetImage("assets/images/flag.png"),
-        ),
-      ),
-    );
-  }
-
-  _mine() {
-    return Container(
-      margin: EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.contain,
-          image: AssetImage("assets/images/bomb.png"),
-        ),
-      ),
-    );
+    if (numMines == 1) {
+      return mayaBlue;
+    } else if (numMines == 2) {
+      return brinkPink;
+    } else {
+      return brightSun;
+    }
   }
 
   Cell(
@@ -52,37 +36,17 @@ class Cell extends StatelessWidget {
       @required this.col,
       @required this.onTap,
       @required this.onLongPress,
-      @required this.gameState}) {
-    if (this.cellViewModel.revealed) {
-      if (this.cellViewModel.numMines > 2) {
-        _color = brightSun;
-      } else if (this.cellViewModel.numMines == 2) {
-        _color = brinkPink;
-      } else {
-        _color = mayaBlue;
-      }
-    } else {
-      _color = ziggurat;
-    }
-  }
+      @required this.gameState})
+      : _color = _setColor(
+            revealed: cellViewModel.revealed, numMines: cellViewModel.numMines);
 
-  //TODO: REFACTOR THIS!!!!!
-  //TODO: REFACTOR THIS!!!!!
-  _cellText() {
+  _body() {
     if (!cellViewModel.revealed && cellViewModel.flagged) {
-      return _flag();
+      return ImageCell(imagePath: flagImagePath);
     } else if (cellViewModel.revealed && cellViewModel.numMines > 0) {
-      return FittedBox(
-          fit: BoxFit.scaleDown,
-          child: SizedBox(
-            child: Text(
-              "${cellViewModel.numMines}",
-              style: TextStyle(
-                  fontFamily: defaultFont, fontSize: 40, color: Colors.white),
-            ),
-          ));
+      return NumberCell(text: "${cellViewModel.numMines}");
     } else if (cellViewModel.mine && gameState == GameState.Lose) {
-      return _mine();
+      return ImageCell(imagePath: bombImagePath);
     } else {
       return Container();
     }
@@ -101,7 +65,45 @@ class Cell extends StatelessWidget {
           margin: EdgeInsets.all(1.0),
           decoration: BoxDecoration(
               color: _color, borderRadius: BorderRadius.circular(4.0)),
-          child: Center(child: _cellText()),
+          child: Center(child: _body()),
+        ));
+  }
+}
+
+class ImageCell extends StatelessWidget {
+  final String imagePath;
+
+  ImageCell({@required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.contain,
+          image: AssetImage(imagePath),
+        ),
+      ),
+    );
+  }
+}
+
+class NumberCell extends StatelessWidget {
+  final String text;
+
+  NumberCell({@required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: SizedBox(
+          child: Text(
+            "text",
+            style: TextStyle(
+                fontFamily: defaultFont, fontSize: 40, color: Colors.white),
+          ),
         ));
   }
 }
