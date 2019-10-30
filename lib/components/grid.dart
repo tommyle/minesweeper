@@ -121,7 +121,7 @@ class CellWidget extends StatelessWidget {
                   fontFamily: defaultFont, fontSize: 40, color: Colors.white),
             ),
           ));
-    } else if (gameState == GameState.Lose && cell.mine) {
+    } else if (cell.mine) {
       return _mine();
     } else {
       return Container();

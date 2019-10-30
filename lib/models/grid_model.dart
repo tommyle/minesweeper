@@ -98,16 +98,43 @@ class GridModel {
     }
   }
 
+  /*
+   * A helper function to start the DFS
+   * It checks for the losing condition at the start and winning condition at the end
+   */
   reveal(int i, int j) {
-    if (i < 0 || i >= rows || j < 0 || j >= cols) {
+    if (_isOutOfBounds(i, j)) {
       return;
     }
 
+    // Check for the losing condition
     if (cells[i][j].mine) {
       gameState = GameState.Lose;
       return;
-    } else if (numRevealed == totalCells - mines) {
+    }
+
+    _revealSearch(i, j);
+
+    // Check for the winning condition
+    if (numRevealed == totalCells - mines) {
       gameState = GameState.Win;
+    }
+  }
+
+  bool _isOutOfBounds(int i, int j) {
+    if (i < 0 || i >= rows || j < 0 || j >= cols) {
+      return true;
+    }
+    return false;
+  }
+
+  /*
+   * This function performs a DFS for unrevealed empty cells that have not been flagged.
+   * When it finds an unrevealed empty cell it will count the number of adjacent bombs
+   * and continue the DFS to all 8 neighbours until the boundry conditions are met.
+   */
+  _revealSearch(int i, int j) {
+    if (_isOutOfBounds(i, j)) {
       return;
     }
 
@@ -150,8 +177,7 @@ class GridModel {
     }
 
     for (List<int> dir in directions) {
-      reveal(i + dir[0], j + dir[1]);
+      _revealSearch(i + dir[0], j + dir[1]);
     }
   }
 }
-
