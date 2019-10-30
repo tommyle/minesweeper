@@ -22,6 +22,7 @@ class Grid extends StatelessWidget {
             color: jaggedIce, borderRadius: BorderRadius.circular(12.0)),
         padding: EdgeInsets.all(16),
         child: GridView.count(
+          shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           crossAxisCount: gridModel.cols,
           children: List.generate(gridModel.totalCells, (index) {

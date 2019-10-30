@@ -30,7 +30,7 @@ class _GameScerenState extends State<GameSceren> {
   _showSettings() async {
     final difficulty = await showDialog<GameDifficulty>(
         context: context, builder: (BuildContext context) => Settings());
-        
+
     _gameBloc.newGame(difficulty: difficulty);
   }
 
@@ -71,18 +71,22 @@ class _GameScerenState extends State<GameSceren> {
       decoration: BoxDecoration(
           color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
       margin: EdgeInsets.all(12),
+      padding: EdgeInsets.all(6),
       child: Center(
           child: StreamBuilder(
               initialData: "--",
               stream: _gameBloc.flagCountController,
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                return Text(
-                  "Flags: ${snapshot.data}",
-                  style: TextStyle(
-                      fontFamily: defaultFont,
-                      fontSize: 20,
-                      color: Colors.black),
-                );
+                return FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: SizedBox(
+                        child: Text(
+                      "Flags: ${snapshot.data}",
+                      style: TextStyle(
+                          fontFamily: defaultFont,
+                          fontSize: 20,
+                          color: Colors.black),
+                    )));
               })),
     );
   }
@@ -131,18 +135,22 @@ class _GameScerenState extends State<GameSceren> {
       decoration: BoxDecoration(
           color: jaggedIce, borderRadius: BorderRadius.circular(100.0)),
       margin: EdgeInsets.all(12),
+      padding: EdgeInsets.all(6),
       child: Center(
           child: StreamBuilder(
               initialData: "--",
               stream: _gameBloc.timerBloc.elapsedTime,
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                return Text(
-                  "${snapshot.data}",
-                  style: TextStyle(
-                      fontFamily: defaultFont,
-                      fontSize: 20,
-                      color: Colors.black),
-                );
+                return FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: SizedBox(
+                        child: Text(
+                      "${snapshot.data}",
+                      style: TextStyle(
+                          fontFamily: defaultFont,
+                          fontSize: 20,
+                          color: Colors.black),
+                    )));
               })),
     );
   }
@@ -152,9 +160,8 @@ class _GameScerenState extends State<GameSceren> {
         stream: _gameBloc.gridModelController,
         builder: (BuildContext context, AsyncSnapshot<GridViewModel> snapshot) {
           if (snapshot.hasData) {
-            return Container(
+            return SizedBox(
                 width: _gameBloc.cols * 35.0,
-                height: _gameBloc.rows * 35.8,
                 child: Grid(
                   gridModel: snapshot.data,
                   onTap: (i, j) {
@@ -173,34 +180,44 @@ class _GameScerenState extends State<GameSceren> {
   _header() {
     return Container(
         margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          Text("MI",
-              style: TextStyle(
-                  color: mayaBlue, fontFamily: defaultFont, fontSize: 60)),
-          Text("NE",
-              style: TextStyle(
-                  color: brinkPink, fontFamily: defaultFont, fontSize: 60)),
-          Text(
-            "SWEEPER",
-            style:
-                TextStyle(color: raven, fontFamily: defaultFont, fontSize: 60),
-          )
-        ]));
+        child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: SizedBox(
+                child: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 60.0,
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'MI',
+                      style:
+                          TextStyle(color: mayaBlue, fontFamily: defaultFont)),
+                  TextSpan(
+                      text: 'NE',
+                      style:
+                          TextStyle(color: brinkPink, fontFamily: defaultFont)),
+                  TextSpan(
+                      text: 'SWEEPER',
+                      style: TextStyle(color: raven, fontFamily: defaultFont))
+                ],
+              ),
+            ))));
   }
 
   _hud() {
     return Container(
-      width: 500,
+      width: 520,
       height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _settingsButton(),
-          _buildFlagsWidget(),
-          _buildResetButton(),
-          _buildTimerWidget(),
-          _leaderBoardButton(),
+          Flexible(flex: 2, child: _settingsButton()),
+          Flexible(flex: 3, child: _buildFlagsWidget()),
+          Flexible(flex: 2, child: _buildResetButton()),
+          Flexible(flex: 3, child: _buildTimerWidget()),
+          Flexible(flex: 2, child: _leaderBoardButton()),
         ],
       ),
     );
@@ -219,11 +236,9 @@ class _GameScerenState extends State<GameSceren> {
     initBloc(context);
 
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Stack(children: <Widget>[
-      Center(
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             _header(),
             _hud(),
@@ -232,6 +247,6 @@ class _GameScerenState extends State<GameSceren> {
           ],
         ),
       ),
-    ])));
+    );
   }
 }
