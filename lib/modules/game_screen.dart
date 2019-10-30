@@ -35,7 +35,7 @@ class _GameScerenState extends State<GameSceren> {
     } else if (result == GameDifficulty.Medium) {
       _gameBloc.newGame(rows: 16, cols: 16, mines: 40);
     } else if (result == GameDifficulty.Hard) {
-      _gameBloc.newGame(rows: 8, cols: 15, mines: 1);
+      _gameBloc.newGame(rows: 16, cols: 30, mines: 99);
     }
   }
 
