@@ -18,6 +18,17 @@ class GridViewModel {
 
   bool get _didWin => numRevealed == totalCells - mines;
 
+  static List<List<int>> directions = [
+    [-1, -1],
+    [0, -1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+    [-1, 1],
+    [-1, 0]
+  ];
+
   /*
    * Generates a grid of cells with mines placed randomly throughout the grid
    */
@@ -137,7 +148,7 @@ class GridViewModel {
   }
 
   /*
-   * This function performs a DFS for unrevealed empty cells that have not been flagged.
+   * This function performs a DFS to reveal empty cells
    * When it finds an unrevealed empty cell it will count the number of adjacent bombs
    * and continue the DFS to all 8 neighbours until the boundry conditions are met.
    */
@@ -150,17 +161,23 @@ class GridViewModel {
       return;
     }
 
-    List<List<int>> directions = [
-      [-1, -1],
-      [0, -1],
-      [1, -1],
-      [1, 0],
-      [1, 1],
-      [0, 1],
-      [-1, 1],
-      [-1, 0]
-    ];
+    cells[i][j].revealed = true;
+    numRevealed += 1;
 
+    int numMines = _countAdjacentMines(i, j);
+
+    if (numMines > 0) {
+      cells[i][j].numMines = numMines;
+      return;
+    }
+
+    for (List<int> dir in directions) {
+      _revealSearch(i + dir[0], j + dir[1]);
+    }
+  }
+
+  // Count the number of adjacent mines
+  _countAdjacentMines(int i, int j) {
     int numMines = 0;
 
     for (List<int> dir in directions) {
@@ -176,16 +193,6 @@ class GridViewModel {
       }
     }
 
-    cells[i][j].revealed = true;
-    numRevealed += 1;
-
-    if (numMines > 0) {
-      cells[i][j].numMines = numMines;
-      return;
-    }
-
-    for (List<int> dir in directions) {
-      _revealSearch(i + dir[0], j + dir[1]);
-    }
+    return numMines;
   }
 }
