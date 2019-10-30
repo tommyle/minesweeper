@@ -160,17 +160,19 @@ class _GameScerenState extends State<GameSceren> {
         stream: _gameBloc.gridModelController,
         builder: (BuildContext context, AsyncSnapshot<GridViewModel> snapshot) {
           if (snapshot.hasData) {
-            return SizedBox(
-                width: _gameBloc.cols * 35.0,
-                child: Grid(
-                  gridModel: snapshot.data,
-                  onTap: (i, j) {
-                    _gameBloc.reveal(i, j);
-                  },
-                  onLongPress: (i, j) {
-                    _gameBloc.toggleFlag(i, j);
-                  },
-                ));
+            return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                    width: _gameBloc.cols * (_gameBloc.cols >= 16 ? 28.0 : 44.0),
+                    child: Grid(
+                      gridModel: snapshot.data,
+                      onTap: (i, j) {
+                        _gameBloc.reveal(i, j);
+                      },
+                      onLongPress: (i, j) {
+                        _gameBloc.toggleFlag(i, j);
+                      },
+                    )));
           } else {
             return Container();
           }
