@@ -1,16 +1,13 @@
-# minesweeper
+<img width='500' src="https://github.com/tommyle/minesweeper/blob/master/assets/promo/banner.png"/>
 
-A new Flutter project.
+<img width='500' src="https://github.com/tommyle/minesweeper/blob/master/assets/promo/screenshot.png"/>
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Update packages:
 
-A few resources to get you started if this is your first Flutter project:
+```flutter pub get```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Run in Chrome:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```flutter run -d chrome```
