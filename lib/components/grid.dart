@@ -35,7 +35,7 @@ class Grid extends StatelessWidget {
               col: col,
               onTap: onTap,
               onLongPress: onLongPress,
-              gameState: gridModel.gameState,
+              didLose: gridModel.didLose,
             );
           }),
         ));

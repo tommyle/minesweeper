@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minesweeper/components/grid.dart';
 import 'package:minesweeper/components/settings.dart';
+import 'package:minesweeper/models/game_state.dart';
 import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
@@ -92,6 +93,16 @@ class _GameScerenState extends State<GameSceren> {
     );
   }
 
+  String _smileyGuyImage(GameState state) {
+    if (state == null || state == GameState.InProgress) {
+      return "assets/images/normal.png";
+    } else if (state == GameState.Win) {
+      return "assets/images/win.png";
+    } else {
+      return "assets/images/lose.png";
+    }
+  }
+
   _buildResetButton() {
     return GestureDetector(
       onTap: () {
@@ -105,21 +116,12 @@ class _GameScerenState extends State<GameSceren> {
                 stream: _gameBloc.gameStateController,
                 builder:
                     (BuildContext context, AsyncSnapshot<GameState> snapshot) {
-                  String image = "assets/images/normal.png";
-
-                  if (snapshot.hasData && snapshot.data == GameState.Win) {
-                    image = "assets/images/win.png";
-                  } else if (snapshot.hasData &&
-                      snapshot.data == GameState.Lose) {
-                    image = "assets/images/lose.png";
-                  }
-
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.contain,
-                        image: AssetImage(image),
+                        image: AssetImage(_smileyGuyImage(snapshot?.data)),
                       ),
                     ),
                   );

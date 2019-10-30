@@ -2,7 +2,7 @@ import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:test_api/test_api.dart';
 
 void main() {
-  group('GridModel', () {
+  group('GridViewModel', () {
     test('it should reveal the grid', () {
       List<List<String>> data = [
         ['E', 'E', 'E', 'E', 'E'],

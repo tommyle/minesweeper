@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:minesweeper/models/game_state.dart';
 import 'package:minesweeper/view_models/cell_view_model.dart';
 import 'dart:math';
-
-import 'package:minesweeper/modules/game/game_bloc.dart';
 
 class GridViewModel {
   List<List<CellViewModel>> cells;
@@ -14,6 +13,10 @@ class GridViewModel {
   int get rows => cells.length;
   int get cols => cells.length > 0 ? cells[0].length : 0;
   int get totalCells => rows * cols;
+  bool get didLose => gameState == GameState.Lose;
+  bool get isInProgress => gameState == GameState.InProgress;
+
+  bool get _didWin => numRevealed == totalCells - mines;
 
   /*
    * Generates a grid of cells with mines placed randomly throughout the grid
@@ -88,6 +91,10 @@ class GridViewModel {
   }
 
   toggleFlag(int i, int j) {
+    if (flags <= 0) {
+      return;
+    }
+
     if (!cells[i][j].revealed) {
       cells[i][j].flagged = !cells[i][j].flagged;
 
@@ -104,7 +111,7 @@ class GridViewModel {
    * It checks for the losing condition at the start and winning condition at the end
    */
   reveal(int i, int j) {
-    if (_isOutOfBounds(i, j)) {
+    if (_isOutOfBounds(i, j) || cells[i][j].flagged) {
       return;
     }
 
@@ -117,7 +124,7 @@ class GridViewModel {
     _revealSearch(i, j);
 
     // Check for the winning condition
-    if (numRevealed == totalCells - mines) {
+    if (_didWin) {
       gameState = GameState.Win;
     }
   }

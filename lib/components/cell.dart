@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:minesweeper/view_models/cell_view_model.dart';
-import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
 
@@ -13,7 +12,7 @@ class Cell extends StatelessWidget {
   final int col;
   final Function(int, int) onTap;
   final Function(int, int) onLongPress;
-  final GameState gameState;
+  final bool didLose;
   final Color _color;
 
   static Color _setColor({@required bool revealed, @required int numMines}) {
@@ -21,7 +20,7 @@ class Cell extends StatelessWidget {
       return ziggurat;
     }
 
-    if (numMines == 1) {
+    if (numMines <= 1) {
       return mayaBlue;
     } else if (numMines == 2) {
       return brinkPink;
@@ -36,7 +35,7 @@ class Cell extends StatelessWidget {
       @required this.col,
       @required this.onTap,
       @required this.onLongPress,
-      @required this.gameState})
+      @required this.didLose})
       : _color = _setColor(
             revealed: cellViewModel.revealed, numMines: cellViewModel.numMines);
 
@@ -45,7 +44,7 @@ class Cell extends StatelessWidget {
       return ImageCell(imagePath: flagImagePath);
     } else if (cellViewModel.revealed && cellViewModel.numMines > 0) {
       return NumberCell(text: "${cellViewModel.numMines}");
-    } else if (cellViewModel.mine && gameState == GameState.Lose) {
+    } else if (cellViewModel.mine && didLose) {
       return ImageCell(imagePath: bombImagePath);
     } else {
       return Container();
@@ -100,7 +99,7 @@ class NumberCell extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: SizedBox(
           child: Text(
-            "text",
+            text,
             style: TextStyle(
                 fontFamily: defaultFont, fontSize: 40, color: Colors.white),
           ),
