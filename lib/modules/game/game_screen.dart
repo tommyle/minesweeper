@@ -28,16 +28,10 @@ class _GameScerenState extends State<GameSceren> {
   }
 
   _showSettings() async {
-    final result = await showDialog<GameDifficulty>(
+    final difficulty = await showDialog<GameDifficulty>(
         context: context, builder: (BuildContext context) => Settings());
-
-    if (result == GameDifficulty.Easy) {
-      _gameBloc.newGame(rows: 9, cols: 9, mines: 10);
-    } else if (result == GameDifficulty.Medium) {
-      _gameBloc.newGame(rows: 16, cols: 16, mines: 40);
-    } else if (result == GameDifficulty.Hard) {
-      _gameBloc.newGame(rows: 16, cols: 30, mines: 99);
-    }
+        
+    _gameBloc.newGame(difficulty: difficulty);
   }
 
   _settingsButton() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minesweeper/components/settings.dart';
 import 'package:minesweeper/models/game_state.dart';
 import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:minesweeper/modules/timer/timer_bloc.dart';
@@ -15,7 +16,7 @@ class GameBloc {
   TimerBloc timerBloc = TimerBloc();
 
   GameBloc() {
-    newGame();
+    _newGame();
   }
 
   GameBloc.withGridModel({@required GridViewModel gridModel}) {
@@ -28,13 +29,27 @@ class GameBloc {
    */
   reset() {
     final gridModel = gridModelController.value;
-    newGame(rows: gridModel.rows, cols: gridModel.cols, mines: gridModel.mines);
+    _newGame(
+        rows: gridModel.rows, cols: gridModel.cols, mines: gridModel.mines);
+  }
+
+  /*
+   * Creates a new game based on the difficulty setting
+   */
+  newGame({@required GameDifficulty difficulty}) {
+    if (difficulty == GameDifficulty.Easy) {
+      _newGame();
+    } else if (difficulty == GameDifficulty.Medium) {
+      _newGame(rows: 16, cols: 16, mines: 40);
+    } else if (difficulty == GameDifficulty.Hard) {
+      _newGame(rows: 16, cols: 30, mines: 99);
+    }
   }
 
   /*
    * Creates a new game. By default an easy level game is created.
    */
-  newGame({int rows = 9, int cols = 9, int mines = 10}) {
+  _newGame({int rows = 9, int cols = 9, int mines = 10}) {
     var gridModel = GridViewModel(rows: rows, cols: cols, mines: mines);
     gridModelController.add(gridModel);
     flagCountController.add(gridModel.flags.toString());
