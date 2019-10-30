@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minesweeper/models/grid_model.dart';
+import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:minesweeper/modules/timer/timer_bloc.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -10,7 +10,7 @@ enum GameState {
 }
 
 class GameBloc {
-  final gridModelController = BehaviorSubject<GridModel>();
+  final gridModelController = BehaviorSubject<GridViewModel>();
   final flagCountController = BehaviorSubject<String>();
   final gameStateController = BehaviorSubject<GameState>();
 
@@ -23,7 +23,7 @@ class GameBloc {
     newGame();
   }
 
-  GameBloc.withGridModel({@required GridModel gridModel}) {
+  GameBloc.withGridModel({@required GridViewModel gridModel}) {
     gridModelController.add(gridModel);
     flagCountController.add(gridModel.flags.toString());
   }
@@ -34,7 +34,7 @@ class GameBloc {
   }
 
   newGame({int rows = 9, int cols = 9, int mines = 10}) {
-    var gridModel = GridModel(rows: rows, cols: cols, mines: mines);
+    var gridModel = GridViewModel(rows: rows, cols: cols, mines: mines);
     gridModelController.add(gridModel);
     flagCountController.add(gridModel.flags.toString());
     gameStateController.add(GameState.InProgress);

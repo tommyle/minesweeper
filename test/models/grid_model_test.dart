@@ -1,4 +1,4 @@
-import 'package:minesweeper/models/grid_model.dart';
+import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:test_api/test_api.dart';
 
 void main() {
@@ -12,7 +12,7 @@ void main() {
         ['E', 'E', 'E', 'E', 'E']
       ];
 
-      GridModel gridModel = GridModel.decode(data);
+      GridViewModel gridModel = GridViewModel.decode(data);
       gridModel.reveal(3, 0);
 
       expect(gridModel.encode(), [
@@ -33,7 +33,7 @@ void main() {
         ['E', 'E', 'E', 'E', 'M']
       ];
 
-      GridModel gridModel = GridModel.decode(data);
+      GridViewModel gridModel = GridViewModel.decode(data);
       gridModel.reveal(3, 0);
 
       expect(gridModel.encode(), [
@@ -54,7 +54,7 @@ void main() {
         ['E', 'E', 'E', 'E', 'M']
       ];
 
-      GridModel gridModel = GridModel.decode(data);
+      GridViewModel gridModel = GridViewModel.decode(data);
       gridModel.reveal(2, 2);
 
       expect(gridModel.encode(), [
@@ -75,7 +75,7 @@ void main() {
         ['E', 'E', 'E', 'E', 'E']
       ];
 
-      GridModel gridModel = GridModel.decode(data);
+      GridViewModel gridModel = GridViewModel.decode(data);
       gridModel.reveal(1, 3);
 
       expect(gridModel.encode(), [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minesweeper/components/grid.dart';
 import 'package:minesweeper/components/settings.dart';
-import 'package:minesweeper/models/grid_model.dart';
+import 'package:minesweeper/view_models/grid_view_model.dart';
 import 'package:minesweeper/modules/game/game_bloc.dart';
 import 'package:minesweeper/utilities/colors.dart';
 import 'package:minesweeper/utilities/constants.dart';
@@ -154,7 +154,7 @@ class _GameScerenState extends State<GameSceren> {
   _buildGridWidget() {
     return StreamBuilder(
         stream: _gameBloc.gridModelController,
-        builder: (BuildContext context, AsyncSnapshot<GridModel> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<GridViewModel> snapshot) {
           if (snapshot.hasData) {
             return Container(
                 width: _gameBloc.cols * 35.0,

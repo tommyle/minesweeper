@@ -1,4 +1,4 @@
-class Cell {
+class CellViewModel {
   String type;
   bool revealed = false;
   bool flagged = false;
@@ -9,7 +9,7 @@ class Cell {
   bool get mine => type == CellType.Mine;
   bool get empty => type == CellType.Empty;
 
-  Cell({this.type = CellType.Empty});
+  CellViewModel({this.type = CellType.Empty});
 }
 
 class CellType {

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:minesweeper/models/cell.dart';
+import 'package:minesweeper/view_models/cell_view_model.dart';
 import 'dart:math';
 
 import 'package:minesweeper/modules/game/game_bloc.dart';
 
-class GridModel {
-  List<List<Cell>> cells;
+class GridViewModel {
+  List<List<CellViewModel>> cells;
   int mines;
   int flags;
   int numRevealed = 0;
@@ -18,7 +18,8 @@ class GridModel {
   /*
    * Generates a grid of cells with mines placed randomly throughout the grid
    */
-  GridModel({@required int rows, @required int cols, @required this.mines}) {
+  GridViewModel(
+      {@required int rows, @required int cols, @required this.mines}) {
     List<List<String>> data = List<List<String>>.generate(
         rows, (_) => List<String>.generate(cols, (_) => CellType.Empty));
 
@@ -42,18 +43,18 @@ class GridModel {
   /*
    * Creates a GridModel from a list of strings
    */
-  GridModel.decode(List<List<String>> data) {
+  GridViewModel.decode(List<List<String>> data) {
     cells = _decode(data);
   }
 
-  List<List<Cell>> _decode(List<List<String>> data) {
-    List<List<Cell>> newCells = List<List<Cell>>();
+  List<List<CellViewModel>> _decode(List<List<String>> data) {
+    List<List<CellViewModel>> newCells = List<List<CellViewModel>>();
 
     for (int i = 0; i < data.length; i++) {
-      List<Cell> row = [];
+      List<CellViewModel> row = [];
 
       for (int j = 0; j < data[i].length; j++) {
-        Cell tile = Cell(type: data[i][j]);
+        CellViewModel tile = CellViewModel(type: data[i][j]);
         row.add(tile);
       }
 
